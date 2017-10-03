@@ -16,7 +16,7 @@ function Game(context) {
 	this.BallCount = 2;
 	this.Ricochet = -0.8;
 	for(let i = 0; i < this.BallCount; i++) {
-		this.Balls.push({ x: Math.random(), y: Math.random(), dx: Math.cos((i / this.BallCount)*2*Math.PI)/100, dy: Math.sin((i / this.BallCount)*2*Math.PI)/100 });
+		this.Balls.push({ x: Math.random(), y: Math.random(), dx: Math.random()/100, dy: Math.random()/100 });
 	}
 	
 	this.Draw = function() {
@@ -39,7 +39,7 @@ function Game(context) {
 			c.arc(x, y, this.BallSize, 0, 2*Math.PI);
 			c.fill();
 		}
-		
+		/*
 		avg.x = Math.floor(avg.x / this.BallCount);
 		avg.y = Math.floor(avg.y / this.BallCount);
 		
@@ -47,7 +47,8 @@ function Game(context) {
 		c.arc(avg.x, avg.y, this.BallSize, 0, 2*Math.PI);
 		c.fillStyle = 'green';
 		c.fill();
-		c.fillStyle = 'black';		
+		c.fillStyle = 'black';
+		*/
 	};
 	
 	//	Positive means repulsive
