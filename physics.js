@@ -104,8 +104,7 @@ function Game(context) {
 			var that = this;
 			var loop = function() {
 				if(that.Running) {
-					that.Update();
-					that.Draw();
+					that.Step();
 					window.requestAnimationFrame(loop);
 				}
 			}
@@ -116,6 +115,11 @@ function Game(context) {
 			this.Running = false;
 		}
 	};
+	
+	this.Step = function(loop) {
+		this.Update();
+		this.Draw();
+	}
 	
 	this.AddBall = function(x, y) {
 		this.BallCount++;
