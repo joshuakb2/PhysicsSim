@@ -104,15 +104,16 @@ function Game(context) {
 		if(yes && !this.Running) {
 			var that = this;
 			var loop = function() {
-				that.Draw();
-				that.Update();
-				this.AnimationFrameRequestId = window.requestAnimationFrame(loop);
+				if(that.Running)
+					that.Draw();
+					that.Update();
+					this.AnimationFrameRequestId = window.requestAnimationFrame(loop);
+				}
 			}
 			this.AnimationFrameRequestId = window.requestAnimationFrame(loop);
 			this.Running = true;
 		}
 		else if(!yes && this.Running) {
-			window.cancelAnimationFrame(this.AnimationFrameRequestId);
 			this.Running = false;
 		}
 	};
