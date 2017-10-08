@@ -17,6 +17,7 @@ function Game(context) {
 		
 		let avg = { x: 0, y: 0 };
 		let totalSpeed = this.Balls.map(b => Math.sqrt(b.dx ** 2 + b.dy ** 2)).aggregate((a, b) => a + b);
+		let averageSpeed = totalSpeed / this.BallCount;
 		
 		for(let i = 0, l = this.BallCount; i < l; i++) {
 			let b = this.Balls[i];
@@ -27,7 +28,7 @@ function Game(context) {
 				avg.y += y;
 			}
 			
-			let color = Math.floor(255.99 * Math.sqrt((b.dx ** 2) + (b.dy ** 2)) / totalSpeed);
+			let color = Math.floor(255.99 * Math.max(0, (Math.sqrt((b.dx ** 2) + (b.dy ** 2)) - averageSpeed)) / (totalSpeed - averageSpeed));
 			
 			c.fillStyle = 'rgb(' + color + ',0,' + (255 - color) + ')';
 			c.beginPath();
