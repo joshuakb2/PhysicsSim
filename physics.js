@@ -19,6 +19,8 @@ function Game(context) {
 		this.Balls.push({ x: Math.random(), y: Math.random(), dx: Math.random()/100, dy: Math.random()/100 });
 	}
 	
+	this.RenderAverage = false;
+	
 	this.Draw = function() {
 		let c = this.Context;
 		c.clearRect(0, 0, 600, 600);
@@ -29,8 +31,10 @@ function Game(context) {
 			let b = this.Balls[i];
 			let x = Math.floor(b.x * 600);
 			let y = Math.floor(b.y * 600);
-			avg.x += x;
-			avg.y += y;
+			if(this.RenderAverage) {
+				avg.x += x;
+				avg.y += y;
+			}
 			
 			let color = Math.floor(Math.atan(100*Math.sqrt((b.dx ** 2) + (b.dy ** 2))) * 255.9);
 			
@@ -39,16 +43,17 @@ function Game(context) {
 			c.arc(x, y, this.BallSize, 0, 2*Math.PI);
 			c.fill();
 		}
-		/*
-		avg.x = Math.floor(avg.x / this.BallCount);
-		avg.y = Math.floor(avg.y / this.BallCount);
 		
-		c.beginPath();
-		c.arc(avg.x, avg.y, this.BallSize, 0, 2*Math.PI);
-		c.fillStyle = 'green';
-		c.fill();
-		c.fillStyle = 'black';
-		*/
+		if(this.RenderAverage) {
+			avg.x = Math.floor(avg.x / this.BallCount);
+			avg.y = Math.floor(avg.y / this.BallCount);
+
+			c.beginPath();
+			c.arc(avg.x, avg.y, this.BallSize, 0, 2*Math.PI);
+			c.fillStyle = 'green';
+			c.fill();
+			c.fillStyle = 'black';
+		}
 	};
 	
 	//	Positive means repulsive
@@ -98,7 +103,6 @@ function Game(context) {
 				dy *= this.Ricochet;
 			}
 			
-			
 			newBalls.push({ x: newX, y: newY, dx: dx, dy: dy });
 		}
 		
@@ -123,3 +127,69 @@ function Game(context) {
 	
 	return this;
 }
+
+//-----------------------------
+//----- Utility functions -----
+//-----------------------------
+
+function range(n) {
+	let r = [];
+	for(let i = 0; i < n; i++)
+		r.push(i);
+	return r;
+}
+
+Array.prototype.where = function(f) {
+	let result = [];
+	for(let i = 0; i < this.length; i++) {
+		if(f(this[i]))
+			result.push(this[i]);
+	}
+	return result;
+}
+
+Array.prototype.aggregate = function(f) {
+	if(this.length == 0)
+		return null;
+	let r = this[0];
+	for(let i = 1; i < this.length; i++)
+		r = f(r, this[i]);
+	return r;
+}
+
+function square(n, margin = 1/(n + 1)) {
+	let coords = range(n)
+					.map(c => range(n)
+								.map(k => ({ x: c, y: k})))
+					.aggregate((a, b) => a.concat(b))
+					.where(t => t.x == 0 || t.y == 0 || t.x == (n - 1) || t.y == (n - 1))
+					.map(c => ({  x: (1 - 2*margin) * c.x / (n - 1) + margin, y: (1 - 2*margin) * c.y / (n - 1) + margin }));
+					
+	for(let i = 0; i < coords.length; i++)
+		game.AddBall(600 * coords[i].x, 600 * coords[i].y);
+}
+
+function circle(n, diameter = 0.75, offset = 0) {
+	for(let i = 0; i < n; i++) {
+		let x = (diameter * Math.cos(2*Math.PI * i / n + offset) + 1) / 2;
+		let y = (diameter * Math.sin(2*Math.PI * i / n + offset) + 1) / 2
+		game.AddBall(600*x, 600*y);
+	}
+}
+
+function spiral(n, spokes = 4, offset = 0, rotationFactor = 1) {
+	for(let i = 0; i < n; i++) {
+		let c = 2 * Math.PI * i / n;
+		let d = 0.8 / n;
+		circle(spokes, 0.1 + i * d, c * rotationFactor + offset);
+	}
+}
+
+function reset() {
+	game.BallCount = 0;
+	game.Balls = [];
+}
+
+//	Some really neat ones to try:
+//	reset(); circle(16); game.Speed *= 2;
+//	reset(); spiral(6, 4);
