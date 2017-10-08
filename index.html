@@ -23,12 +23,14 @@
 			var game;
 			var canvas;
 			var context;
-			var startButton = document.getElementById('startButton');
-			var displayAverageButton = document.getElementById('displayAverageButton');
+			var startButton;
+			var displayAverageButton;
 			
 			function init() {
 				canvas = document.getElementById('canvas1');
 				context = canvas.getContext('2d');
+				startButton = document.getElementById('startButton');
+				displayAverageButton = document.getElementById('displayAverageButton');
 				game = new Game(context);
 				game.Draw();
 			}
