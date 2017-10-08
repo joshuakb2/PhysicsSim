@@ -20,13 +20,33 @@
 		</style>
 		<script src=physics.js></script>
 		<script>
+			var game;
+			var canvas = document.getElementById('canvas1');
+			var context = canvas.getContext('2d');
+			var startButton = document.getElementById('startButton');
+			var displayAverageButton = document.getElementById('displayAverageButton');
+			
+			function init() {
+				game = new Game(context);
+				game.Draw();
+			}
 			function addBall(e) {
 				game.AddBall(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+			}
+			function toggleRunning() {
+				game.Run(!game.Running);
+				startButton.innerHTML = game.Running ? 'Pause' : 'Start';
+			}
+			function toggleAverage() {
+				game.RenderAverage = !game.RenderAverage;
+				disableAverageButton.innerHTML = game.RenderAverage ? 'Stop displaying average' : 'Display average';
 			}
 		</script>
 	</head>
 	<body onload="init()">
 		<canvas id=canvas1 width=600 height=600 onclick="addBall(event);"></canvas>
-		<button type=button onclick="game.Start();">Start</button>
+		<button id=startButton type=button onclick="toggleRunning()">Start</button>
+		<button id=resetButton type=button onclick="reset()">Reset</button>
+		<button id=displayAverageButton type=button onclick="toggleAverage()">Display average</button>
 	</body>
 </html>
