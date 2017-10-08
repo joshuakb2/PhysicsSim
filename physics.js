@@ -211,6 +211,17 @@ function reset() {
 	game.Draw();
 }
 
+function stabilize(p) {
+	if(window.stabilizeId)
+		clearInterval(window.stabilizeId);
+	
+	window.stabilizeId = window.setInterval(function() {
+		for(let i = 0; i < game.BallCount; i++) {
+			game.Balls[i].dx = game.Balls[i].dy = 0;
+		}
+	}, p * 1000);
+}
+
 //	Some really neat ones to try:
 //	reset(); circle(16); game.Speed *= 2;
 //	reset(); spiral(6, 4);
