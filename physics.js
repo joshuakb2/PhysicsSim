@@ -5,6 +5,7 @@ function Game(context) {
 	this.BallCount = 2;
 	this.Ricochet = -0.8;
 	this.Running = false;
+	this.AnimationFrameRequestId;
 	for(let i = 0; i < this.BallCount; i++) {
 		this.Balls.push({ x: Math.random(), y: Math.random(), dx: Math.random()/100, dy: Math.random()/100 });
 	}
@@ -100,19 +101,18 @@ function Game(context) {
 	};
 	
 	this.Run = function(yes) {
-		var id;
 		if(yes && !this.Running) {
 			var that = this;
 			var loop = function() {
 				that.Draw();
 				that.Update();
-				id = window.requestAnimationFrame(loop);
+				this.AnimationFrameRequestId = window.requestAnimationFrame(loop);
 			}
-			id = window.requestAnimationFrame(loop);
+			this.AnimationFrameRequestId = window.requestAnimationFrame(loop);
 			this.Running = true;
 		}
 		else if(!yes && this.Running) {
-			window.cancelAnimationFrame(id);
+			window.cancelAnimationFrame(this.AnimationFrameRequestId);
 			this.Running = false;
 		}
 	};
