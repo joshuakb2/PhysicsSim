@@ -5,7 +5,8 @@ function Game(context) {
 	this.BallCount = 2;
 	this.Ricochet = -0.8;
 	this.Running = false;
-	this.LastDrawTime = null;
+	this.LastDrawTime = 0;
+	this.FrameCount = 0;
 	for(let i = 0; i < this.BallCount; i++) {
 		this.Balls.push({ x: Math.random(), y: Math.random(), dx: Math.random()/100, dy: Math.random()/100 });
 	}
@@ -47,11 +48,19 @@ function Game(context) {
 			c.fillStyle = 'black';
 		}
 		
+		this.FrameCount++;
+		
 		let time = new Date().getMilliseconds();
 		if(this.LastDrawTime) {
-			fps.innerHTML = Math.floor(1000 / (time - this.LastDrawTime));
+			let c = time - this.LastDrawTime;
+			if(c > 1) {
+				fps.innerHTML = Math.floor(1000 * this.FrameCount / c);
+				this.LastDrawTime = time;
+				this.FrameCount = 0;
+			}
 		}
-		this.LastDrawTime = time;		
+		else
+			this.LastDrawTime = time;
 	};
 	
 	//	Positive means repulsive
