@@ -1,20 +1,10 @@
-var canvas;
-var context;
-var game;
-
-function init() {
-	canvas = document.getElementById('canvas1');
-	context = canvas.getContext('2d');
-	game = new Game(context);
-	game.Draw();
-}
-
 function Game(context) {
 	this.Context = context;
 	this.Balls = [];
 	this.BallSize = 5;
 	this.BallCount = 2;
 	this.Ricochet = -0.8;
+	this.Running = false;
 	for(let i = 0; i < this.BallCount; i++) {
 		this.Balls.push({ x: Math.random(), y: Math.random(), dx: Math.random()/100, dy: Math.random()/100 });
 	}
@@ -109,20 +99,29 @@ function Game(context) {
 		this.Balls = newBalls;
 	};
 	
-	this.Start = function() {
-		var that = this;
-		var loop = function() {
-			that.Draw();
-			that.Update();
-			window.requestAnimationFrame(loop);
+	this.Run = function(yes) {
+		var id;
+		if(yes && !this.Running) {
+			var that = this;
+			var loop = function() {
+				that.Draw();
+				that.Update();
+				id = window.requestAnimationFrame(loop);
+			}
+			id = window.requestAnimationFrame(loop);
+			this.Running = true;
 		}
-		window.requestAnimationFrame(loop);
+		else if(!yes && this.Running) {
+			window.cancelAnimationFrame(id);
+			this.Running = false;
+		}
 	};
 	
 	this.AddBall = function(x, y) {
 		this.BallCount++;
 		this.Balls.push({ x: x/600, y: y/600, dx: 0, dy: 0 });
 		this.Speed = 1/Math.sqrt(this.BallCount);
+		this.Draw();
 	};
 	
 	return this;
@@ -159,11 +158,11 @@ Array.prototype.aggregate = function(f) {
 
 function square(n, margin = 1/(n + 1)) {
 	let coords = range(n)
-					.map(c => range(n)
-								.map(k => ({ x: c, y: k})))
-					.aggregate((a, b) => a.concat(b))
-					.where(t => t.x == 0 || t.y == 0 || t.x == (n - 1) || t.y == (n - 1))
-					.map(c => ({  x: (1 - 2*margin) * c.x / (n - 1) + margin, y: (1 - 2*margin) * c.y / (n - 1) + margin }));
+			.map(c => range(n)
+					.map(k => ({ x: c, y: k})))
+			.aggregate((a, b) => a.concat(b))
+			.where(t => t.x == 0 || t.y == 0 || t.x == (n - 1) || t.y == (n - 1))
+			.map(c => ({  x: (1 - 2*margin) * c.x / (n - 1) + margin, y: (1 - 2*margin) * c.y / (n - 1) + margin }));
 					
 	for(let i = 0; i < coords.length; i++)
 		game.AddBall(600 * coords[i].x, 600 * coords[i].y);
