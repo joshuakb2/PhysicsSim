@@ -53,7 +53,7 @@ function Game(context) {
 		let time = new Date().getMilliseconds();
 		if(this.LastDrawTime) {
 			let c = time - this.LastDrawTime;
-			if(c > 1) {
+			if(c > 1000) {
 				fps.innerHTML = Math.floor(1000 * this.FrameCount / c);
 				this.LastDrawTime = time;
 				this.FrameCount = 0;
