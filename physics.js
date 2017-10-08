@@ -104,8 +104,8 @@ function Game(context) {
 			var that = this;
 			var loop = function() {
 				if(that.Running) {
-					that.Draw();
 					that.Update();
+					that.Draw();
 					window.requestAnimationFrame(loop);
 				}
 			}
