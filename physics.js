@@ -211,15 +211,15 @@ function reset() {
 	game.Draw();
 }
 
-function stabilize(p) {
+function stabilize(p = 1) {
 	if(window.stabilizeId)
 		clearInterval(window.stabilizeId);
-	
-	window.stabilizeId = window.setInterval(function() {
-		for(let i = 0; i < game.BallCount; i++) {
-			game.Balls[i].dx = game.Balls[i].dy = 0;
-		}
-	}, p * 1000);
+	if(p)
+		window.stabilizeId = window.setInterval(function() {
+			for(let i = 0; i < game.BallCount; i++) {
+				game.Balls[i].dx = game.Balls[i].dy = 0;
+			}
+		}, p * 1000);
 }
 
 //	Some really neat ones to try:
