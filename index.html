@@ -25,12 +25,14 @@
 			var context;
 			var startButton;
 			var displayAverageButton;
+			var fps;
 			
 			function init() {
 				canvas = document.getElementById('canvas1');
 				context = canvas.getContext('2d');
 				startButton = document.getElementById('startButton');
 				displayAverageButton = document.getElementById('displayAverageButton');
+				fps = document.getElementById('fps');
 				game = new Game(context);
 				game.Draw();
 			}
@@ -49,6 +51,7 @@
 		</script>
 	</head>
 	<body onload="init()">
+		<div>FPS: <span id=fps></span></div>
 		<canvas id=canvas1 width=600 height=600 onclick="addBall(event);"></canvas>
 		<button id=startButton type=button onclick="toggleRunning()">Start</button>
 		<button id=stepButton type=button onclick="game.Step()">Step</button>
