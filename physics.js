@@ -50,7 +50,7 @@ function Game(context) {
 	//	Positive means repulsive
 	this.Forces = {
 		gravity: (d) => -0.000005/d/d,
-		someRepulsion: (d) => 0.000005/d/d - 0.001
+		someRepulsion: (d) => 0.00005/d/d - 0.001
 	};
 	
 	this.Force = this.Forces.gravity;
