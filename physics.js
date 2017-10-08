@@ -50,7 +50,7 @@ function Game(context) {
 		
 		this.FrameCount++;
 		
-		let time = new Date().getMilliseconds();
+		let time = new Date().getTime();
 		if(this.LastDrawTime) {
 			let c = time - this.LastDrawTime;
 			if(c > 1000) {
